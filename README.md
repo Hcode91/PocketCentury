@@ -64,3 +64,9 @@ hardware keys, and their real labels aren't confirmed yet.
 
 GPL-2.0-or-later. The u'nSP core and disassembler come from MAME and are GPL-2.0+.
 Copyright Segher Boessenkool, Ryan Holtz and David Haywood.
+
+## Starting from another app
+
+Launchers and trackers (such as BacklogQuest's home-screen tiles) can boot the console directly:
+send `com.hcode91.pocket.LAUNCH_GAME` to the app's launcher activity. Without the ROM files the
+menu opens instead, so they can be imported.

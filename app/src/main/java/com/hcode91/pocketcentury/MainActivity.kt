@@ -16,6 +16,9 @@ class MainActivity : Activity() {
     companion object {
         private const val REQ_IMPORT = 1
         private const val ACCENT = 0xFFE11D48.toInt()
+
+        /** The request another app (BacklogQuest's home-screen tiles) sends to boot the console straight away. */
+        const val ACTION_LAUNCH_GAME = "com.hcode91.pocket.LAUNCH_GAME"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +60,25 @@ class MainActivity : Activity() {
             setPadding(0, dp(24), 0, 0)
         })
         setContentView(root)
+
+        // Started from a tile: boot straight away. Without the ROM files the menu stays open so
+        // they can be imported.
+        if (savedInstanceState == null && launchFrom(intent)) finish()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (launchFrom(intent)) finish()
+    }
+
+    private fun launchFrom(i: Intent?): Boolean {
+        if (i?.action != ACTION_LAUNCH_GAME) return false
+        if (!Storage.ready(this)) {
+            Toast.makeText(this, "Import the ROM files first", Toast.LENGTH_LONG).show()
+            return false
+        }
+        startActivity(Intent(this, EmulatorActivity::class.java))
+        return true
     }
 
     override fun onResume() {
